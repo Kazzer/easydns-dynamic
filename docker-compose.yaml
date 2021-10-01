@@ -1,0 +1,10 @@
+---
+version: '3'
+services:
+    easydns-dynamic:
+        image: kazzer/easydns-dynamic:${APP_VERSION:-latest}
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command:
+            - username:password:domain.example.
