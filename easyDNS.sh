@@ -83,6 +83,11 @@ update_easydns_if_changed() {
                         do
                             resolver="$(head -n 1 <(dig -4 +short "${apex_domain}" NS))"
                             apex_domain="${apex_domain#*.}"
+                            if [ -z "${apex_domain}" ]
+                            then
+                                echo >&2 "'${domain}' does not have any name servers"
+                                continue 2
+                            fi
                         done
 
                         while read -r ip
@@ -97,6 +102,11 @@ update_easydns_if_changed() {
                         do
                             resolver="$(head -n 1 <(dig -6 +short "${apex_domain}" NS))"
                             apex_domain="${apex_domain#*.}"
+                            if [ -z "${apex_domain}" ]
+                            then
+                                echo >&2 "'${domain}' does not have any name servers"
+                                continue 2
+                            fi
                         done
 
                         while read -r ip
@@ -126,9 +136,12 @@ update_easydns_if_changed() {
 }
 
 main() {
-    ipv4
-    ipv6
-    sleep "${interval}"
+    while :
+    do
+        ipv4
+        ipv6
+        sleep "${interval}"
+    done
 }
 
 #################
